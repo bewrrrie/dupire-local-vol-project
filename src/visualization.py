@@ -3,6 +3,9 @@ from matplotlib import cm
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
+import numpy as np
+import seaborn as sns
+
 
 def plot_vol_smile(df, target_T):
     """
