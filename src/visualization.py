@@ -7,7 +7,7 @@ import numpy as np
 import seaborn as sns
 
 
-def plot_vol_smile(df, target_T):
+def plot_vol_smile(df, target_T, figures_dir="."):
     """
     Plots the implied volatility ''smile'' for a specific maturity.
 
@@ -40,10 +40,11 @@ def plot_vol_smile(df, target_T):
     plt.ylabel("Implied Volatility")
     plt.legend()
     plt.grid(True, alpha=0.3)
+    plt.savefig(f"{figures_dir}/nvda_vol_smile.png", dpi=300, bbox_inches='tight')
     plt.show()
 
 
-def plot_volatility_surfaces(K_grid, T_grid, iv_surf, local_vol, snapshot_date):
+def plot_volatility_surfaces(K_grid, T_grid, iv_surf, local_vol, snapshot_date, figures_dir="."):
     """
     Generates 3D (static) visualization of implied and
     local volatility surfaces.
@@ -66,14 +67,15 @@ def plot_volatility_surfaces(K_grid, T_grid, iv_surf, local_vol, snapshot_date):
     ax1 = fig.add_subplot(121, projection='3d')
     surf1 = ax1.plot_surface(K_grid, T_grid, iv_surf, cmap=cm.viridis, antialiased=True)
     ax1.set_title(f"Implied Volatility Surface (Market)\n{snapshot_date.date()}")
-    ax1.set_xlabel("Strike"); ax1.set_ylabel("T"); ax1.set_zlabel("IV")
+    ax1.set_xlabel("Strike price, K"); ax1.set_ylabel("Time to maturity, T"); ax1.set_zlabel("IV")
     
     ax2 = fig.add_subplot(122, projection='3d')
     surf2 = ax2.plot_surface(K_grid, T_grid, local_vol, cmap=cm.plasma, antialiased=True)
     ax2.set_title("Local Volatility Surface (Dupire Stabilized)")
-    ax2.set_xlabel("Strike"); ax2.set_ylabel("T"); ax2.set_zlabel("Local Vol")
+    ax2.set_xlabel("Strike price, K"); ax2.set_ylabel("Time to maturity, T"); ax2.set_zlabel("Local Vol")
     
     plt.tight_layout()
+    plt.savefig(f"{figures_dir}/nvda_vol_surf.png", dpi=300, bbox_inches='tight')
     plt.show()
 
 
@@ -134,14 +136,14 @@ def plot_volatility_surfaces_plotly(K_grid, T_grid, iv_surf, local_vol, snapshot
         height=600,
         margin=dict(l=50, r=50, b=50, t=100),
         scene=dict(
-            xaxis_title='Strike',
-            yaxis_title='Maturity (T)',
-            zaxis_title='IV'
+            xaxis_title="Strike price, K",
+            yaxis_title="Time to maturity, T",
+            zaxis_title="Implied Volatility"
         ),
         scene2=dict(
-            xaxis_title='Strike',
-            yaxis_title='Maturity (T)',
-            zaxis_title='Local Vol'
+            xaxis_title="Strike price, K",
+            yaxis_title="Time to maturity, T",
+            zaxis_title="Local Volatility"
         )
     )
 
