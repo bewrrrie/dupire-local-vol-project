@@ -67,12 +67,12 @@ def plot_volatility_surfaces(K_grid, T_grid, iv_surf, local_vol, snapshot_date, 
     ax1 = fig.add_subplot(121, projection='3d')
     surf1 = ax1.plot_surface(K_grid, T_grid, iv_surf, cmap=cm.viridis, antialiased=True)
     ax1.set_title(f"Implied Volatility Surface (Market)\n{snapshot_date.date()}")
-    ax1.set_xlabel("Strike price, K"); ax1.set_ylabel("Time to maturity, T"); ax1.set_zlabel("IV")
+    ax1.set_xlabel("Strike price, K"); ax1.set_ylabel("Time to maturity, T"); ax1.set_zlabel("Implied Volatility")
     
     ax2 = fig.add_subplot(122, projection='3d')
     surf2 = ax2.plot_surface(K_grid, T_grid, local_vol, cmap=cm.plasma, antialiased=True)
     ax2.set_title("Local Volatility Surface (Dupire Stabilized)")
-    ax2.set_xlabel("Strike price, K"); ax2.set_ylabel("Time to maturity, T"); ax2.set_zlabel("Local Vol")
+    ax2.set_xlabel("Strike price, K"); ax2.set_ylabel("Time to maturity, T"); ax2.set_zlabel("Local Volatility")
     
     plt.tight_layout()
     plt.savefig(f"{figures_dir}/nvda_vol_surf.png", dpi=300, bbox_inches='tight')
