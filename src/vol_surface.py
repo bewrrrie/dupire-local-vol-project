@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.interpolate import RectBivariateSpline
 
-def build_volatility_surfaces(df, r = 0.04):
+def build_volatility_surfaces(df, r=0.04, q=0.0002):
     """
     Fits a Bivariate Spline to market IV and derives the local volatility surface.
 
@@ -14,6 +14,8 @@ def build_volatility_surfaces(df, r = 0.04):
         Cleaned options data containing 'strike', 'T', 'S', and 'iv'.
     r : float, optional
         The risk-free interest rate (default is 0.04).
+    q : float, optional
+        Continuous dividend yield (default is 0.0002).
 
     Returns
     -------
@@ -53,9 +55,9 @@ def build_volatility_surfaces(df, r = 0.04):
 
     # Dupire formula
     S_now = df['S'].iloc[0]
-    d1 = (np.log(S_now / K_grid) + (r + 0.5 * iv_surface**2) * T_grid) / (iv_surface * np.sqrt(T_grid))
+    d1 = (np.log(S_now / K_grid) + ((r - q) + 0.5 * iv_surface**2) * T_grid) / (iv_surface * np.sqrt(T_grid))
 
-    numerator = iv_surface**2 + 2 * iv_surface * T_grid * (dV_dT + r * K_grid * dV_dK)
+    numerator = iv_surface**2 + 2 * iv_surface * T_grid * (dV_dT + (r - q) * K_grid * dV_dK)
     denominator = (1 + K_grid * d1 * np.sqrt(T_grid) * dV_dK)**2 + \
                   (iv_surface * K_grid**2 * T_grid) * (d2V_dK2 - d1 * np.sqrt(T_grid) * (dV_dK**2))
 

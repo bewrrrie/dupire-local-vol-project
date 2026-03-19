@@ -29,7 +29,7 @@ def black_scholes_call(S, K, T, r, sigma):
     return S * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
 
 
-def local_vol_monte_carlo(S0, K, T, r, spline_model, n_sims=10000, n_steps=50):
+def local_vol_monte_carlo(S0, K, T, r, spline_model, q=0.0002, n_sims=10000, n_steps=50):
     """
     Prices a European call using Monte Carlo simulation under local volatility.
     
@@ -40,6 +40,7 @@ def local_vol_monte_carlo(S0, K, T, r, spline_model, n_sims=10000, n_steps=50):
     T : float : Time to maturity (years)
     r : float : Risk-free rate
     spline_model : RectBivariateSpline : The fitted IV spline to derive local vol
+    q : float, optional : Continuous dividend yield (default is 0.0002)
     """
     dt = T / n_steps
     S_t = np.full(n_sims, S0)
@@ -48,7 +49,7 @@ def local_vol_monte_carlo(S0, K, T, r, spline_model, n_sims=10000, n_steps=50):
         t_curr = i * dt
         sigma_local = spline_model(t_curr, S_t, grid=False) 
         Z = np.random.standard_normal(n_sims)
-        S_t *= np.exp((r - 0.5 * sigma_local**2) * dt + sigma_local * np.sqrt(dt) * Z)
+        S_t *= np.exp(((r - q) - 0.5 * sigma_local**2) * dt + sigma_local * np.sqrt(dt) * Z)
         
     payoff = np.maximum(S_t - K, 0)
     return np.exp(-r * T) * np.mean(payoff)
