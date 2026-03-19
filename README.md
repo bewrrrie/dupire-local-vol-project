@@ -6,7 +6,7 @@ The dataset used is [$NVDA Option Chains - Q1 2020 to Q4 2022](https://www.kaggl
 
 ## Project Overview
 The standard Black-Scholes model assumes constant volatility ($\sigma$), which fails to account for the market's pricing of tail risk. This project:
-1.  Extracts & Cleans multi-year NVDA option chains.
+1.  Extracts & Cleans NVDA option chains data.
 2.  Constructs a smooth Implied Volatility (IV) Surface using bivariate splines.
 3.  Derives the Local Volatility Surface using the Dupire Identity.
 4.  Prices options via Monte Carlo simulation and compares them against the Black-Scholes benchmark.
